@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/fabfdf08cb.js" crossorigin="anonymous"></script>
+    <title>TO DO List</title>
+    <style>
+        body {
+            background-color: #a2a2e8;
+           
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .action-container, .list-container {
+            background-color: #fff;
+            width: 90%;
+            max-width: 350px;
+            padding: 20px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        input {
+            width: 70%;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 10px;
+            border: 2px solid #d1d3d4;
+            border-radius: 50px;
+            background-color: #9fd2f9;
+        }
+
+        .btn {
+            background-color: #88bce3;
+           
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .list-container {
+            height: 250px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-y: auto;
+        }
+
+        .todo-item {
+            background-color: #5e64b7;
+            height: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 5px 10px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #d1d3d4;
+            border-radius: 5px;
+        }
+
+        .btn-delete {
+            background-color: #7e9ad0;
+           
+            color: #ffffff;
+            width: 40px;
+            padding: 7px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="list-container" id="list-container"> </div>
+
+    <div class="action-container">
+        <div class="input-container">
+            <input type="text" id="input" placeholder="Add Task to do" />
+
+            <button type="button" class="btn" onclick="add()">
+                Add
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let todolist = [];
+
+        const listOfLocalStorage = localStorage.getItem("todolist");
+        if (listOfLocalStorage) {
+            todolist = JSON.parse(listOfLocalStorage);
+            renderTodo();
+        }
+
+        function add() {
+            const inputElement = document.getElementById('input');
+            if (inputElement.value.trim() !== "") {
+                todolist.push(inputElement.value);
+                inputElement.value = "";
+                localStorage.setItem("todolist", JSON.stringify(todolist));
+                renderTodo();
+            }
+        }
+
+        function deleteItem(index) {
+            todolist.splice(index, 1);
+            localStorage.setItem("todolist", JSON.stringify(todolist));
+            renderTodo();
+        }
+
+        function renderTodo() {
+            const listContainer = document.getElementById('list-container');
+            listContainer.innerHTML = "";
+
+            todolist.forEach((todoItem, index) => {
+                listContainer.innerHTML += `<div class="todo-item"> 
+                                                <p>${todoItem}</p>
+                                                <button type="button" class="btn-delete" onclick="deleteItem(${index})">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button> 
+                                            </div>`;
+            });
+        }
+    </script>
+</body>
+
+</html>
